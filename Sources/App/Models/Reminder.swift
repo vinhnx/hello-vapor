@@ -1,21 +1,26 @@
 import FluentProvider
 
 final class Reminder: Model {
-    
-    private enum Keypath: String {
-        case title, description
+
+    public enum Keypath: String {
+        case id, title, description
     }
-    
+
     // MARK: - Storage
 
     let storage = Storage()
-    
+
     // MARK: - Properties
 
     let title: String
     let description: String
-    
+
     // MARK: - Life cycle
+
+    init(title: String, description: String) {
+        self.title = title
+        self.description = description
+    }
     
     init(row: Row) throws {
         self.title = try row.get(Keypath.title.rawValue)
@@ -38,10 +43,24 @@ extension Reminder: Preparation {
             creator.string(Keypath.description.rawValue)
         })
     }
-    
+
     static func revert(_ database: Database) throws {
         try database.delete(self)
     }
 }
+extension Reminder: JSONConvertible {
+    convenience init(json: JSON) throws {
+        try self.init(title: json.get(Keypath.title.rawValue),
+                      description: json.get(Keypath.description.rawValue))
+    }
+    
+    func makeJSON() throws -> JSON {
+        var json = JSON()
+        try json.set(Keypath.id.rawValue, self.id)
+        try json.set(Keypath.title.rawValue, self.title)
+        try json.set(Keypath.description.rawValue, self.description)
+        return json
+    }
+}
 
-
+extension Reminder: ResponseRepresentable {}
