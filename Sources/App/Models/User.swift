@@ -38,6 +38,15 @@ extension User {
     }
 }
 
+extension User: NodeRepresentable {
+    func makeNode(in context: Context?) throws -> Node {
+        var node = Node([:], in: context)
+        try node.set(Keypath.id.rawValue, self.id)
+        try node.set(Keypath.name.rawValue, self.name)
+        return node
+    }
+}
+
 extension User: Preparation {
     static func prepare(_ database: Database) throws {
         try database.create(self) { builder in

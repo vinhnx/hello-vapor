@@ -65,6 +65,7 @@ extension Reminder: Preparation {
         try database.delete(self)
     }
 }
+
 extension Reminder: JSONConvertible {
     convenience init(json: JSON) throws {
         let userID: Identifier = try json.get(Keypath.user_id.rawValue)
@@ -84,6 +85,16 @@ extension Reminder: JSONConvertible {
         try json.set(Keypath.description.rawValue, self.description)
         try json.set(Keypath.user_id.rawValue, self.userID)
         return json
+    }
+}
+
+extension Reminder: NodeRepresentable {
+    func makeNode(in context: Context?) throws -> Node {
+        var node = Node([:], in: context)
+        try node.set(Keypath.id.rawValue, self.id)
+        try node.set(Keypath.title.rawValue, self.title)
+        try node.set(Keypath.description.rawValue, self.description)
+        return node
     }
 }
 

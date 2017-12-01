@@ -1,13 +1,20 @@
-<!doctype html>
+#extend("base")
 
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Home | Reminders</title>
-</head>
+#export("body") {
+    <h1>Reminders</h1>
+    <table>
+        <thead><td>Title</td><td>Description</td></thead>
+        #loop(reminders, "reminder") {
+                <tr><td><a href="/reminders/#(reminder.id)">#(reminder.title)</a></td><td>#(reminder.description)</td></tr>
+        }
+    </table>
 
-<body>
-	<h1>Reminders</h1>
-	<p>Let's not forget</p>
-</body>
-</html>
+    <h1>Categories</h1>
+<table>
+    <thead><td>Name</td></thead>
+    #loop(categories, "category") {
+        <tr><td><a href="/categories/#(category.id)">#(category.name)</a></td></tr>
+    }
+</table>
+<p><a href="/categories/">All Categories</a></p>
+}

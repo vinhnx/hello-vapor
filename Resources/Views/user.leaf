@@ -1,0 +1,24 @@
+#extend("base")
+
+#export("body") {
+    <h1>#(user.name)</h1>
+
+    #if(reminders) {
+        <h2>#(user.name)'s Reminders</h2>
+        <table>
+            <thead><td>Title</td><td>Description</td></thead>
+            #loop(reminders, "reminder") {
+                <tr><td><a href="/reminders/#(reminder.id)">#(reminder.title)</a></td><td>#(reminder.description)</td></tr>
+            }
+        </table>
+    }
+
+    <h1>Users</h1>
+    <table>
+        <thead><td>Name</td></thead>
+        #loop(users, "user") {
+            <tr><td><a href="/users/#(user.id)">#(user.name)</a></td></tr>
+        }
+    </table>
+    <p><a href="/users/">All Users</a></p>
+}
