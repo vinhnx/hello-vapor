@@ -18,8 +18,8 @@ struct RemindersController {
         // GET
         // NOTE: by not specifying a path for this route, it will simple be registered to the root path of the route group
         reminderGroup.get(handler: allReminders)
-        
         reminderGroup.get(Reminder.parameter, handler: getReminder)
+        reminderGroup.get(Reminder.parameter, "user", handler: getUserByReminder)
         
         // POST
         reminderGroup.post("create", handler: createReminder)
@@ -44,5 +44,14 @@ struct RemindersController {
     
     func getReminder(_ request: Request) throws -> ResponseRepresentable {
         return try request.parameters.next(Reminder.self)
+    }
+    
+    func getUserByReminder(_ request: Request) throws -> ResponseRepresentable {
+        let reminder = try request.parameters.next(Reminder.self)
+        guard let user = try reminder.user.get() else {
+            throw Abort.notFound
+        }
+        
+        return user
     }
 }
