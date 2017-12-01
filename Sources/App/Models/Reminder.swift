@@ -1,6 +1,6 @@
 import FluentProvider
 
-final class Reminder: Model, ResponseRepresentable {
+final class Reminder: Model {
 
     public enum Keypath: String {
         case id, title, description, user_id
@@ -43,6 +43,11 @@ extension Reminder {
     var user: Parent<Reminder, User> {
         return parent(id: self.userID)
     }
+
+    //  SiblingLocal: Entity, Foreign: Entity, Through: Entity
+    var categories: Siblings<Reminder, Category, Pivot<Reminder, Category>> {
+        return siblings()
+    }
 }
 
 extension Reminder: Preparation {
@@ -81,3 +86,5 @@ extension Reminder: JSONConvertible {
         return json
     }
 }
+
+extension Reminder: ResponseRepresentable {}

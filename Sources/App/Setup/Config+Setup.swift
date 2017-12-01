@@ -21,5 +21,7 @@ extension Config {
         // IMPORTANT: `User` preparation must come before the `Reminder` preparation
         self.preparations.append(User.self)
         self.preparations.append(Reminder.self)
+        self.preparations.append(Category.self)
+        self.preparations.append(Pivot<Reminder, Category>.self)
     }
 }

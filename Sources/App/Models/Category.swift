@@ -1,17 +1,19 @@
 //
-//  User.swift
-//  Run
+//  Category.swift
+//  App
 //
 //  Created by Vinh Nguyen on 1/12/17.
 //
 
 import FluentProvider
 
-final class User: Model {
+final class Category: Model {
     
-    private enum Keypath: String {
-        case id, name
+    enum Keypath: String {
+        case id, categories, name
     }
+    
+    static let entity = Keypath.categories.rawValue
     
     let storage = Storage()
     
@@ -32,13 +34,13 @@ final class User: Model {
     }
 }
 
-extension User {
-    var reminder: Children<User, Reminder> {
-        return children()
+extension Category {
+    var reminders: Siblings<Category, Reminder, Pivot<Category, Reminder>> {
+        return siblings()
     }
 }
 
-extension User: Preparation {
+extension Category: Preparation {
     static func prepare(_ database: Database) throws {
         try database.create(self) { builder in
             builder.id()
@@ -51,17 +53,17 @@ extension User: Preparation {
     }
 }
 
-extension User: JSONConvertible {
+extension Category: JSONConvertible {
+    func makeJSON() throws -> JSON {
+        var json = JSON()
+        try json.set(Keypath.id.rawValue, self.id)
+        try json.set(Keypath.name.rawValue, self.name)
+        return json
+    }
+    
     convenience init(json: JSON) throws {
         try self.init(name: json.get(Keypath.name.rawValue))
     }
-    
-    func makeJSON() throws -> JSON {
-        var json = JSON()
-        try json.set(Keypath.name.rawValue, self.name)
-        try json.set(Keypath.id.rawValue, self.id)
-        return json
-    }
 }
 
-extension User: ResponseRepresentable {}
+extension Category: ResponseRepresentable {}
