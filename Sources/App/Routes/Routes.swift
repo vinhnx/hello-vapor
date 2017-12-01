@@ -10,5 +10,8 @@ extension Droplet {
 
         let categoriesController = CategoriesController()
         categoriesController.addRoutes(to: self)
+
+        let webController = WebController(viewRenderer: view)
+        webController.addRoutes(to: self)
     }
 }
