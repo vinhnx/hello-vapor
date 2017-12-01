@@ -38,6 +38,18 @@ extension Category {
     var reminders: Siblings<Category, Reminder, Pivot<Category, Reminder>> {
         return siblings()
     }
+    
+    static func addCategory(_ name: String, to reminder: Reminder) throws {
+        var category: Category
+        if let found = try Category.makeQuery().filter(Keypath.name.rawValue, self.name).first() {
+            category = found
+        } else {
+            category = Category(name: name)
+            try category.save()
+        }
+        
+        try category.reminders.add(reminder)
+    }
 }
 
 extension Category: Preparation {

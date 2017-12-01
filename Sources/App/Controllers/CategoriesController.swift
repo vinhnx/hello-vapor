@@ -38,7 +38,7 @@ struct CategoriesController {
     
     func getCategories(_ request: Request) throws -> ResponseRepresentable {
         let category = try request.parameters.next(Category.self)
-        return try category
+        return category
     }
     
     func getCategorysReminders(_ req: Request) throws -> ResponseRepresentable {

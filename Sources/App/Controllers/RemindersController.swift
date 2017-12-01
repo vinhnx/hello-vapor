@@ -38,9 +38,11 @@ struct RemindersController {
         
         if let categories = json[Category.Keypath.categories.rawValue]?.array {
             for catJSON in categories {
-                if let category = try Category.find(catJSON[Category.Keypath.id.rawValue]) {
-                    try reminder.categories.add(category)
+                guard let catName = catJSON.string else {
+                    throw Abort.badRequest
                 }
+                
+                try Category.addCategory(catName, to: reminder)
             }
         }
         
